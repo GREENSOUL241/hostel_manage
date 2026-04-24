@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS hostel_management;
 USE hostel_management;
 
+-- ADMIN
 CREATE TABLE ADMIN (
   admin_id INT PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(50) UNIQUE NOT NULL,
@@ -9,6 +10,7 @@ CREATE TABLE ADMIN (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- WARDEN
 CREATE TABLE WARDEN (
   Warden_ID INT PRIMARY KEY AUTO_INCREMENT,
   Name VARCHAR(100) NOT NULL,
@@ -16,6 +18,7 @@ CREATE TABLE WARDEN (
   Address TEXT NOT NULL
 );
 
+-- HOSTEL
 CREATE TABLE HOSTEL (
   Hostel_name VARCHAR(100) PRIMARY KEY,
   Hostel_Location VARCHAR(255) NOT NULL,
@@ -25,6 +28,7 @@ CREATE TABLE HOSTEL (
     ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+-- ROOMS
 CREATE TABLE ROOMS (
   Room_No INT PRIMARY KEY,
   Floor_no INT NOT NULL,
@@ -32,6 +36,7 @@ CREATE TABLE ROOMS (
   S_ID INT DEFAULT NULL
 );
 
+-- STUDENT
 CREATE TABLE STUDENT (
   S_ID INT PRIMARY KEY AUTO_INCREMENT,
   Fname VARCHAR(50) NOT NULL,
@@ -44,11 +49,13 @@ CREATE TABLE STUDENT (
     ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+-- Add FK after table creation
 ALTER TABLE ROOMS
   ADD CONSTRAINT fk_rooms_student
   FOREIGN KEY (S_ID) REFERENCES STUDENT(S_ID)
     ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- PAYMENT
 CREATE TABLE PAYMENT (
   Payment_ID INT PRIMARY KEY AUTO_INCREMENT,
   Paymentdate DATE NOT NULL,
@@ -58,6 +65,7 @@ CREATE TABLE PAYMENT (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- STUDENT AUTH
 CREATE TABLE STUDENT_AUTH (
   student_auth_id INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(100) UNIQUE NOT NULL,
@@ -69,6 +77,7 @@ CREATE TABLE STUDENT_AUTH (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- BOOKINGS
 CREATE TABLE BOOKINGS (
   booking_id INT PRIMARY KEY AUTO_INCREMENT,
   S_ID INT NOT NULL,
@@ -85,56 +94,24 @@ CREATE TABLE BOOKINGS (
     ON DELETE CASCADE
 );
 
-INSERT INTO WARDEN (Name, Contact, Address) VALUES
-('Aarav Mehta', '9876543210', '12 Lake View Road'),
-('Neha Sharma', '9876501234', '84 Park Street'),
-('Rohan Singh', '9811122233', '45 MG Road'),
-('Priya Nair', '9898989898', '29 Hill Top Lane'),
-('Kabir Khan', '9800001111', '77 Sunrise Avenue');
+-- MINIMAL SAMPLE DATA
 
-INSERT INTO HOSTEL (Hostel_name, Hostel_Location, Room_no, Warden_ID) VALUES
-('Alpha Hostel', 'North Campus', 120, 1),
-('Beta Hostel', 'South Campus', 90, 2),
-('Gamma Hostel', 'East Campus', 110, 3);
+INSERT INTO ADMIN (username, email, password)
+VALUES ('admin', 'admin@hostel.com', '$2b$12$8swmA8Qw6a6YY4cF2xBzCO4GsYxJZGfQxAZTJQw8wM14jArlTc95y');
 
-INSERT INTO ROOMS (Room_No, Floor_no, Room_Type, S_ID) VALUES
-(101, 1, 'Single', NULL),
-(102, 1, 'Double', NULL),
-(103, 1, 'Double', NULL),
-(201, 2, 'Single', NULL),
-(202, 2, 'Triple', NULL),
-(203, 2, 'Double', NULL),
-(301, 3, 'Single', NULL),
-(302, 3, 'Double', NULL),
-(303, 3, 'Triple', NULL),
-(304, 3, 'Double', NULL);
+INSERT INTO WARDEN (Name, Contact, Address)
+VALUES ('Aarav Mehta', '9876543210', 'Lake View Road');
 
-INSERT INTO STUDENT (Fname, Minit, Lname, GENDER, ADDRESS, Room_No) VALUES
-('Aman', 'K', 'Verma', 'M', 'Delhi', 101),
-('Sara', 'M', 'Khan', 'F', 'Mumbai', 102),
-('Ishaan', NULL, 'Gupta', 'M', 'Pune', 103),
-('Meera', 'S', 'Rao', 'F', 'Bengaluru', 201),
-('Arjun', 'P', 'Das', 'M', 'Kolkata', 202),
-('Nisha', NULL, 'Patel', 'F', 'Ahmedabad', 203),
-('Rahul', 'T', 'Shah', 'M', 'Surat', 301),
-('Ananya', 'J', 'Iyer', 'F', 'Chennai', 302);
+INSERT INTO HOSTEL (Hostel_name, Hostel_Location, Room_no, Warden_ID)
+VALUES ('Alpha Hostel', 'North Campus', 100, 1);
+
+INSERT INTO ROOMS (Room_No, Floor_no, Room_Type)
+VALUES (101, 1, 'Single');
+
+INSERT INTO STUDENT (Fname, Lname, GENDER, ADDRESS, Room_No)
+VALUES ('Aman', 'Verma', 'M', 'Delhi', 101);
 
 UPDATE ROOMS SET S_ID = 1 WHERE Room_No = 101;
-UPDATE ROOMS SET S_ID = 2 WHERE Room_No = 102;
-UPDATE ROOMS SET S_ID = 3 WHERE Room_No = 103;
-UPDATE ROOMS SET S_ID = 4 WHERE Room_No = 201;
-UPDATE ROOMS SET S_ID = 5 WHERE Room_No = 202;
-UPDATE ROOMS SET S_ID = 6 WHERE Room_No = 203;
-UPDATE ROOMS SET S_ID = 7 WHERE Room_No = 301;
-UPDATE ROOMS SET S_ID = 8 WHERE Room_No = 302;
 
-INSERT INTO PAYMENT (Paymentdate, Mode, Student_ID) VALUES
-('2026-04-01', 'UPI', 1),
-('2026-04-02', 'Cash', 2),
-('2026-04-03', 'Card', 3),
-('2026-04-04', 'Bank Transfer', 4),
-('2026-04-05', 'UPI', 5),
-('2026-04-06', 'Cash', 6);
-
-INSERT INTO ADMIN (username, email, password) VALUES
-('admin', 'admin@hostel.com', '$2b$12$8swmA8Qw6a6YY4cF2xBzCO4GsYxJZGfQxAZTJQw8wM14jArlTc95y');
+INSERT INTO PAYMENT (Paymentdate, Mode, Student_ID)
+VALUES ('2026-04-01', 'UPI', 1);
